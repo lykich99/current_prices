@@ -59,6 +59,10 @@ function correct_prices_scripts_method() {
 		</script>
 		
 	<?php
+	/*
+	 * Include own version of jquery
+	 */ 
+	wp_enqueue_script( 'jquery' );
     wp_enqueue_script( 'my_script', plugins_url('js/correct_prices_script.js', __FILE__) );            
 }    
  
@@ -96,10 +100,17 @@ function correct_prices_page() {
       
     echo"<h1>Setting for correct prices plugin:</h1>" ; ?>
     <?php
-    
+        /*
+        *   If user have manage options make update data setting
+        */ 
    
        if( current_user_can('manage_options') ){
 			
+			/*
+			 * If we have POST and check nonce field save data  
+			 * 
+			 */
+			 
 			if ( !empty($_POST)  && check_admin_referer( 'correct_prices_update_action', 'correct_prices_update_field' ) ) {
 			
 			   if( is_numeric($_POST['current_rate']) ) {
@@ -120,10 +131,9 @@ function correct_prices_page() {
       This coefficient will be the number what you want
     </div>
     
-    <form name="correct_prices_form_sitings"  method="post" action="<?php echo $_SERVER['PHP_SELF']."?page=correct_prices&amp;update=true"; ?>">
-        
-          <?php wp_nonce_field( 'correct_prices_update_action','correct_prices_update_field' ); ?>  
+    <form name="correct_prices_form_sitings"  method="post" action="<?php echo $_SERVER['PHP_SELF']."?page=correct_prices"; ?>">
     
+          <?php wp_nonce_field( 'correct_prices_update_action','correct_prices_update_field' ); ?>  
 		  <p><h2>Current rate</h2></p>
           <p></p><input name="current_rate" type="text" value="<?php echo get_option('correct_prices_plugin_options')['current_rate']; ?>"></p>
           <p> <input type="submit" value="Submit"></p>
